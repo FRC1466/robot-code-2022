@@ -46,11 +46,12 @@ public final class Constants {
     public static final double kaVoltSecondsSquaredPerMeter = 0.2;
 
     // Example value only - as above, this must be tuned for your drive!
-    public static final double kPDriveVel = 8.5;
+    public static final double kPDriveVel = 5;
   }
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 1;
+    public static final int IntakePort = 2;
   }
 
   public static final class AutoConstants {
@@ -62,8 +63,13 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
   }
 
-  public static final class ArmConstants {
+  public static final class IntakeConstants {
     public static final int amr1 = 5;
     public static final int arm2 = 4;
+
+    public static final int armEncoderPort = 5;
+
+    public static final double armVolts = 0.20;
+    public static final double rollerVolts = 0.10;
   }
 }
