@@ -69,7 +69,7 @@ public final class Constants {
 
     public static final int armEncoderPort = 5;
 
-    public static final double armVolts = 0.20;
-    public static final double rollerVolts = 0.10;
+    public static final double armPower = 0.20;
+    public static final double rollerPower = 0.50;
   }
 }

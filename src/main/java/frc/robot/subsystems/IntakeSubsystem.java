@@ -5,7 +5,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -29,11 +29,17 @@ public class IntakeSubsystem extends SubsystemBase {
         armMotor.setInverted(TalonFXInvertType.Clockwise);
     }
 
-    public void runRoller() {
-        rollerMotor.setVoltage(IntakeConstants.rollerVolts);
+    public void runArm(double fwd) {
+        armMotor.set(Constants.IntakeConstants.armPower*fwd);
+    }
+
+    public void runRoller(double fwd) {
+        rollerMotor.set(fwd);
     }
 
     public void stopRoller() {
-        rollerMotor.setVoltage(0.0);
+        rollerMotor.set(0.0);
     }
+
+    
 }

@@ -122,11 +122,11 @@ public class DriveSubsystem extends SubsystemBase {
    * Resets the odometry to the specified pose.
    *
    * @param pose The pose to which to set the odometry.
-   */
+   
   public void resetOdometry(Pose2d pose) {
     resetEncoders();
     m_odometry.resetPosition(pose, m_gyro.getRotation2d());
-  }
+  } */
 
   /**
    * Drives the robot using arcade controls.
@@ -194,26 +194,28 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.setMaxOutput(maxOutput);
   }
 
-  /** Zeroes the heading of the robot. */
+  /** Zeroes the heading of the robot.
   public void zeroHeading() {
     m_gyro.reset();
   }
+
+  /*
 
   /**
    * Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from -180 to 180
-   */
+   
   public double getHeading() {
     return m_gyro.getRotation2d().getDegrees();
-  }
+  } */
 
   /**
    * Returns the turn rate of the robot.
    *
    * @return The turn rate of the robot, in degrees per second
-   */
+   
   public double getTurnRate() {
     return -m_gyro.getRate();
-  }
+  } */
 }

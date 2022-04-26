@@ -37,7 +37,7 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final IntakeSubsystem robot_intake = new IntakeSubsystem();
+  private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -60,7 +60,14 @@ public class RobotContainer {
                 m_robotDrive.arcadeDrive(
                     -m_driverController.getRightY(), m_driverController.getLeftX()),
             m_robotDrive));
+    m_robotIntake.setDefaultCommand(
+        new RunCommand(
+        () -> m_robotIntake.runArm(intakeController.getRightY()),
+        
+        m_robotIntake)
+        );
   }
+
 
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -74,9 +81,13 @@ public class RobotContainer {
         .whenPressed(() -> m_robotDrive.setMaxOutput(0.15))
         .whenReleased(() -> m_robotDrive.setMaxOutput(0.3));
     new JoystickButton(intakeController, Button.kRightBumper.value)
-        .whenPressed(() -> robot_intake.runRoller())
-        .whenReleased(() -> robot_intake.stopRoller());
+        .whenPressed(() -> m_robotIntake.runRoller(Constants.IntakeConstants.rollerPower))
+        .whenReleased(() -> m_robotIntake.stopRoller());
+    new JoystickButton(intakeController, Button.kLeftBumper.value)
+        .whenPressed(() -> m_robotIntake.runRoller(-Constants.IntakeConstants.rollerPower))
+        .whenReleased(() -> m_robotIntake.stopRoller());
     }
+    
 
 
 
@@ -136,7 +147,7 @@ public class RobotContainer {
             m_robotDrive);
 
     // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+    // m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> m_robotDrive.tankDriveVolts(0, 0));
