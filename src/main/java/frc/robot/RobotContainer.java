@@ -48,7 +48,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-
+    m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentDefault);
     
     
 
@@ -79,8 +79,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Drive at half speed when the right bumper is held
     new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .whenPressed(() -> m_robotDrive.setMaxOutput(0.15))
-        .whenReleased(() -> m_robotDrive.setMaxOutput(0.3));
+        .whenPressed(() -> m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentActive))
+        .whenReleased(() -> m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentDefault));
     new JoystickButton(intakeController, Button.kRightBumper.value)
         .whenPressed(() -> m_robotIntake.runRoller(Constants.IntakeConstants.rollerPower))
         .whenReleased(() -> m_robotIntake.stopRoller());

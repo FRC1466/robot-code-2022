@@ -47,11 +47,15 @@ public final class Constants {
 
     // Example value only - as above, this must be tuned for your drive!
     public static final double kPDriveVel = 5;
+
+    // Drive limiters
+    public static final double kDrivePercentDefault = 0.3;
+    public static final double kDrivePercentActive = 0.15;
   }
 
   public static final class OIConstants {
-    public static final int kDriverControllerPort = 1;
-    public static final int IntakePort = 2;
+    public static final int kDriverControllerPort = 0;
+    public static final int IntakePort = 1;
   }
 
   public static final class AutoConstants {
