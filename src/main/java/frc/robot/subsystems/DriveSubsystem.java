@@ -11,29 +11,36 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.PIDConstants;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class DriveSubsystem extends SubsystemBase {
-  // The motors on the left side of the drive.
-  private final WPI_TalonFX m_leftMotor1 = new WPI_TalonFX(DriveConstants.kLeftMotor1Port);
-  private final WPI_TalonFX m_leftMotor2 = new WPI_TalonFX(DriveConstants.kLeftMotor2Port);
 
-  // The motors on the right side of the drive.
-  private final WPI_TalonFX m_rightMotor1 = new WPI_TalonFX(DriveConstants.kRightMotor1Port);
-  private final WPI_TalonFX m_rightMotor2 = new WPI_TalonFX(DriveConstants.kRightMotor2Port);
+  // motor array
+  WPI_TalonFX[] motors = new WPI_TalonFX[] {
+    new WPI_TalonFX(DriveConstants.kLeftMotor1Port),  // motors[0] = left1
+    new WPI_TalonFX(DriveConstants.kLeftMotor2Port),  // motors[1] = left2
+    new WPI_TalonFX(DriveConstants.kRightMotor1Port), // motors[2] = right1
+    new WPI_TalonFX(DriveConstants.kRightMotor2Port)  // motors[3] = right2
+  }; 
+
+
+
+
 
 
   // The robot's drive
   private final DifferentialDrive m_drive = new DifferentialDrive(
-      new MotorControllerGroup(m_leftMotor1, m_leftMotor2), 
-      new MotorControllerGroup(m_rightMotor1, m_rightMotor2));
+      new MotorControllerGroup(motors[0], motors[1]), 
+      new MotorControllerGroup(motors[2], motors[3]));
 
   // The left-side drive encoder
   private final Encoder m_leftEncoder =
@@ -55,35 +62,55 @@ public class DriveSubsystem extends SubsystemBase {
   // Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
 
+  private void initializeMotors() {
+
+  for (int i=0; i<motors.length; i++) {
+    motors[i].configFactoryDefault();
+    motors[i].set(ControlMode.PercentOutput, 0);
+    motors[i].setNeutralMode(NeutralMode.Brake);
+    motors[i].configNeutralDeadband(0.001);
+    if (i < 2)
+    {
+      motors[i].setInverted(TalonFXInvertType.CounterClockwise);
+    } else {
+      motors[i].setInverted(TalonFXInvertType.Clockwise);
+    }
+
+
+  }
+
+  }
+  
+
+  private void initializePID() { //help there's so much
+    for (int i=0; i<motors.length; i++) 
+    {
+      motors[i].configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
+      PIDConstants.kPIDLoopIdx, 
+      PIDConstants.kTimeoutMs);
+
+
+      /* Config the peak and nominal outputs */
+      motors[i].configNominalOutputForward(0, PIDConstants.kTimeoutMs);
+      motors[i].configNominalOutputReverse(0, PIDConstants.kTimeoutMs);
+      motors[i].configPeakOutputForward(1, PIDConstants.kTimeoutMs);
+      motors[i].configPeakOutputReverse(-1, PIDConstants.kTimeoutMs);
+
+      /* Config the Velocity closed loop gains in slot0 */
+      motors[i].config_kF(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kF, PIDConstants.kTimeoutMs);
+      motors[i].config_kP(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kP, PIDConstants.kTimeoutMs);
+      motors[i].config_kI(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kI, PIDConstants.kTimeoutMs);
+      motors[i].config_kD(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kD, PIDConstants.kTimeoutMs);
+    }
+  }
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
 
-    m_rightMotor1.set(ControlMode.PercentOutput, 0);
-    m_rightMotor2.set(ControlMode.PercentOutput, 0);
-    m_leftMotor1.set(ControlMode.PercentOutput, 0);
-    m_leftMotor2.set(ControlMode.PercentOutput, 0);
-
-    m_rightMotor1.configFactoryDefault();
-    m_rightMotor2.configFactoryDefault();
-    m_leftMotor1.configFactoryDefault();
-    m_leftMotor2.configFactoryDefault();
-
-    m_rightMotor1.setNeutralMode(NeutralMode.Brake);
-    m_rightMotor2.setNeutralMode(NeutralMode.Brake);
-    m_leftMotor1.setNeutralMode(NeutralMode.Brake);
-    m_leftMotor2.setNeutralMode(NeutralMode.Brake);
-
-    m_rightMotor1.setInverted(TalonFXInvertType.Clockwise);
-    m_rightMotor2.setInverted(TalonFXInvertType.Clockwise);
-    m_leftMotor1.setInverted(TalonFXInvertType.CounterClockwise);
-    m_leftMotor2.setInverted(TalonFXInvertType.CounterClockwise);
-    
-
-
-   
+    initializeMotors();
 
     // Sets the distance per pulse for the encoders
     m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
@@ -145,10 +172,9 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rightVolts the commanded right output
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
-    m_leftMotor1.setVoltage(leftVolts);
-    m_leftMotor2.setVoltage(leftVolts);
-    m_rightMotor1.setVoltage(rightVolts);
-    m_rightMotor2.setVoltage(rightVolts);
+    for (WPI_TalonFX wpi_TalonFX : motors) {
+      wpi_TalonFX.setVoltage(0);
+    }
     m_drive.feed();
   }
 

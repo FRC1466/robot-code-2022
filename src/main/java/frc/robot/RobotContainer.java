@@ -22,10 +22,13 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.commands.DriveCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -51,19 +54,19 @@ public class RobotContainer {
     m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentDefault);
     
     
+    DriveCommand m_driveCommand = new DriveCommand(m_robotDrive, -m_driverController.getLeftY(), m_driverController.getRightX());
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
     m_robotDrive.setDefaultCommand(
-        // A split-stick arcade command
         new RunCommand(
-            () ->
-                m_robotDrive.arcadeDrive(
-                    -m_driverController.getRightY(), m_driverController.getLeftX()),
-            m_robotDrive));
+        () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), m_driverController.getLeftX())
+        , m_robotDrive)
+    );
+
     m_robotIntake.setDefaultCommand(
         new RunCommand(
-        () -> m_robotIntake.runArm(intakeController.getRightY()),
+        () -> m_robotIntake.runArm(m_driverController.getRightY()),
         
         m_robotIntake)
         );
@@ -78,13 +81,13 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Drive at half speed when the right bumper is held
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
+    new JoystickButton(m_driverController, Button.kA.value)
         .whenPressed(() -> m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentActive))
         .whenReleased(() -> m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentDefault));
-    new JoystickButton(intakeController, Button.kRightBumper.value)
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whenPressed(() -> m_robotIntake.runRoller(Constants.IntakeConstants.rollerPower))
         .whenReleased(() -> m_robotIntake.stopRoller());
-    new JoystickButton(intakeController, Button.kLeftBumper.value)
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
         .whenPressed(() -> m_robotIntake.runRoller(-Constants.IntakeConstants.rollerPower))
         .whenReleased(() -> m_robotIntake.stopRoller());
     }
