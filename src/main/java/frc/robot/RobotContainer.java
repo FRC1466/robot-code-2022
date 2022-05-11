@@ -54,14 +54,12 @@ public class RobotContainer {
     m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentDefault);
     
     
-    DriveCommand m_driveCommand = new DriveCommand(m_robotDrive, -m_driverController.getLeftY(), m_driverController.getRightX());
+
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
     m_robotDrive.setDefaultCommand(
-        new RunCommand(
-        () -> m_robotDrive.arcadeDrive(m_driverController.getLeftY(), m_driverController.getLeftX())
-        , m_robotDrive)
+        new DriveCommand(m_robotDrive, m_driverController)
     );
 
     m_robotIntake.setDefaultCommand(

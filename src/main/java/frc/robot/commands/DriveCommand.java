@@ -1,23 +1,27 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveCommand extends CommandBase {
     private final DriveSubsystem m_drive;
-    private final double m_forward;
-    private final double m_rotation;
+    private final XboxController m_controller;
     
-    public DriveCommand(DriveSubsystem subsystem, double forward, double rotation) {
+    public DriveCommand(DriveSubsystem subsystem, XboxController controller) {
         m_drive = subsystem;
-        m_forward = forward;
-        m_rotation = rotation;
+        addRequirements(m_drive);
+
+        m_controller = controller;
     }
 
+    @Override
     public void initialize() {
         
     }
+
+    @Override
     public void execute() {
-        m_drive.arcadeDrive(m_forward, m_rotation);
+        m_drive.arcadeDrive(m_controller.getLeftY(), m_controller.getLeftX());
     }
 }
