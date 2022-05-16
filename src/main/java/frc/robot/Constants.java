@@ -49,8 +49,8 @@ public final class Constants {
     public static final double kPDriveVel = 5;
 
     // Drive limiters
-    public static final double kDrivePercentDefault = 0.3;
-    public static final double kDrivePercentActive = 0.15;
+    public static final double kDrivePercentDefault = 0.35;
+    public static final double kDrivePercentActive = 0.20;
   }
 
   public static final class OIConstants {
@@ -83,7 +83,7 @@ public final class Constants {
     public static final int kTimeoutMs = 30;
 
     //                                                    kP   	 kI    kD      kF          Iz    PeakOut
-    public final static Gains kGains_Velocit  = new Gains( 0.1, 0.001, 5, 1023.0/20660.0,  300,  1.00);
+    public final static Gains kGains_Velocit  = new Gains( 0.08, 0.001, 3.5, 1023.0/20660.0,  300,  0.75);
 
   }
 

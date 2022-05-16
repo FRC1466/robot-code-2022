@@ -16,11 +16,13 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import java.lang.Math;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -93,8 +95,8 @@ public class DriveSubsystem extends SubsystemBase {
       /* Config the peak and nominal outputs */
       motors[i].configNominalOutputForward(0, PIDConstants.kTimeoutMs);
       motors[i].configNominalOutputReverse(0, PIDConstants.kTimeoutMs);
-      motors[i].configPeakOutputForward(1, PIDConstants.kTimeoutMs);
-      motors[i].configPeakOutputReverse(-1, PIDConstants.kTimeoutMs);
+      motors[i].configPeakOutputForward(PIDConstants.kGains_Velocit.kPeakOutput, PIDConstants.kTimeoutMs);
+      motors[i].configPeakOutputReverse(-PIDConstants.kGains_Velocit.kPeakOutput, PIDConstants.kTimeoutMs);
 
       /* Config the Velocity closed loop gains in slot0 */
       motors[i].config_kF(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kF, PIDConstants.kTimeoutMs);
@@ -164,6 +166,19 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void arcadeDrive(double fwd, double rot) {
     m_drive.arcadeDrive(fwd, rot);
+  }
+
+  public void arcadeDrivePID(double targetFwd, double targetRot) {
+    double targetVelocity_UnitsPer100msRight = (targetFwd - targetRot) / 2 * 2000.0 * 2048.0 / 600.0;
+    double targetVelocity_UnitsPer100msLeft = (targetFwd + targetRot) / 2 * 2000.0 * 2048.0 / 600.0;
+    for (int i=0; i<(motors.length/2); i++) {
+      motors[i].set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100msLeft);
+      System.out.println(targetVelocity_UnitsPer100msLeft);
+    }
+    for (int i=(motors.length/2); i<motors.length; i++) {
+      motors[i].set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100msRight);
+      System.out.println(targetVelocity_UnitsPer100msRight);
+    }
   }
 
   /**

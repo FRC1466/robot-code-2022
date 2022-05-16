@@ -43,10 +43,14 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final IntakeSubsystem m_robotIntake = new IntakeSubsystem();
+  
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   XboxController intakeController = new XboxController(OIConstants.IntakePort);
+
+  DriveCommand m_DriveCommand = new DriveCommand(m_robotDrive, m_driverController, false);
+  DriveCommand m_DriveCommandPID = new DriveCommand(m_robotDrive, m_driverController, true);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -56,11 +60,10 @@ public class RobotContainer {
     
     
 
-
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
     m_robotDrive.setDefaultCommand(
-        new DriveCommand(m_robotDrive, m_driverController)
+        m_DriveCommand
     );
 
     m_robotIntake.setDefaultCommand(
@@ -85,6 +88,9 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
         .whenPressed(() -> m_robotIntake.runRoller(-Constants.IntakeConstants.rollerPower))
         .whenReleased(() -> m_robotIntake.stopRoller());
+    new JoystickButton(m_driverController, Button.kY.value)
+        .whenPressed(m_DriveCommandPID)
+        .whenReleased(m_DriveCommand);
     }
     
 
