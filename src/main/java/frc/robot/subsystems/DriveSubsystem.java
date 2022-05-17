@@ -169,8 +169,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void arcadeDrivePID(double targetFwd, double targetRot) {
-    double targetVelocity_UnitsPer100msRight = (targetFwd - targetRot) / 2 * 2000.0 * 2048.0 / 600.0;
-    double targetVelocity_UnitsPer100msLeft = (targetFwd + targetRot) / 2 * 2000.0 * 2048.0 / 600.0;
+    double targetVelocity_UnitsPer100msRight = (targetFwd - targetRot) * 2000.0 * 2048.0 / 600.0;
+    double targetVelocity_UnitsPer100msLeft = (targetFwd + targetRot) * 2000.0 * 2048.0 / 600.0;
     for (int i=0; i<(motors.length/2); i++) {
       motors[i].set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100msLeft);
       System.out.println(targetVelocity_UnitsPer100msLeft);

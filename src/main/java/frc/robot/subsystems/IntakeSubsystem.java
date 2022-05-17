@@ -43,21 +43,21 @@ public class IntakeSubsystem extends SubsystemBase {
         for (int i=0; i<armMotors.length; i++) 
         {
             armMotors[i].configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
-            PIDConstants.kPIDLoopIdx, 
-            PIDConstants.kTimeoutMs);
+            IntakeConstants.kPIDLoopIdx, 
+            IntakeConstants.kTimeoutMs);
 
 
             /* Config the peak and nominal outputs */
-            armMotors[i].configNominalOutputForward(0, PIDConstants.kTimeoutMs);
-            armMotors[i].configNominalOutputReverse(0, PIDConstants.kTimeoutMs);
-            armMotors[i].configPeakOutputForward(PIDConstants.kGains_Velocit.kPeakOutput, PIDConstants.kTimeoutMs);
-            armMotors[i].configPeakOutputReverse(-PIDConstants.kGains_Velocit.kPeakOutput, PIDConstants.kTimeoutMs);
+            armMotors[i].configNominalOutputForward(0, IntakeConstants.kTimeoutMs);
+            armMotors[i].configNominalOutputReverse(0, IntakeConstants.kTimeoutMs);
+            armMotors[i].configPeakOutputForward(IntakeConstants.kGains_Velocit.kPeakOutput, IntakeConstants.kTimeoutMs);
+            armMotors[i].configPeakOutputReverse(-IntakeConstants.kGains_Velocit.kPeakOutput, IntakeConstants.kTimeoutMs);
 
             /* Config the Velocity closed loop gains in slot0 */
-            armMotors[i].config_kF(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kF, PIDConstants.kTimeoutMs);
-            armMotors[i].config_kP(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kP, PIDConstants.kTimeoutMs);
-            armMotors[i].config_kI(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kI, PIDConstants.kTimeoutMs);
-            armMotors[i].config_kD(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kD, PIDConstants.kTimeoutMs);
+            armMotors[i].config_kF(IntakeConstants.kPIDLoopIdx, IntakeConstants.kGains_Velocit.kF, IntakeConstants.kTimeoutMs);
+            armMotors[i].config_kP(IntakeConstants.kPIDLoopIdx, IntakeConstants.kGains_Velocit.kP, IntakeConstants.kTimeoutMs);
+            armMotors[i].config_kI(IntakeConstants.kPIDLoopIdx, IntakeConstants.kGains_Velocit.kI, IntakeConstants.kTimeoutMs);
+            armMotors[i].config_kD(IntakeConstants.kPIDLoopIdx, IntakeConstants.kGains_Velocit.kD, IntakeConstants.kTimeoutMs);
         }
     }
 
@@ -72,16 +72,31 @@ public class IntakeSubsystem extends SubsystemBase {
         resetEncoders();
     }
 
-    public void runArm(double fwd, boolean isMoving) {
-        double targetVelocity_UnitsPer100ms = Constants.IntakeConstants.armPower * fwd * 2000.0 * 2048.0 / 600.0;
+    public void runArm(double fwd, boolean isMoving, double lastPos) {
+        // double targetVelocity_UnitsPer100ms = Constants.IntakeConstants.armPower * fwd * 2000.0 * 2048.0 / 600.0;
         if (isMoving) {
-            armMotors[1].set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100ms);
+            armMotors[1].set(fwd * Constants.IntakeConstants.armPower);
+        } else {
+            armMotors[1].set(TalonFXControlMode.Position, lastPos);
         }
-            armMotors[1].set(fwd*Constants.IntakeConstants.armPower);
     }
 
+    public double getPosition() {
+        return armMotors[1].getSelectedSensorPosition();
+    }
+
+    public double getVelocity() {
+        return armMotors[1].getSelectedSensorVelocity();
+    }
+
+    public double getPercentage() {
+        return armMotors[1].getMotorOutputPercent();
+    }
+
+    
+
     public void runRoller(double fwd) {
-        armMotors[0].set(fwd);
+        armMotors[0].set(fwd*IntakeConstants.rollerPower);
     }
 
     public void stopRoller() {

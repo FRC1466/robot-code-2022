@@ -51,6 +51,8 @@ public final class Constants {
     // Drive limiters
     public static final double kDrivePercentDefault = 0.35;
     public static final double kDrivePercentActive = 0.20;
+    public static final double kDrivePercentActivePID = 0.8;
+
   }
 
   public static final class OIConstants {
@@ -75,6 +77,16 @@ public final class Constants {
 
     public static final double armPower = 0.30;
     public static final double rollerPower = 0.50;
+
+    public static final int kSlotIdx = 0;
+    public static final int kPIDLoopIdx = 0;
+    public static final int kTimeoutMs = 30;
+
+    private static final double Ku = 4;
+    private static final double Tu = 0.7;
+    //                                              kP: 4   	 kI    kD      kF          Iz    PeakOut
+    public final static Gains kGains_Velocit  = new Gains(1.5, 0.001, 2, 0,  40,  0.2);
+
   }
 
   public static final class PIDConstants {
@@ -83,7 +95,7 @@ public final class Constants {
     public static final int kTimeoutMs = 30;
 
     //                                                    kP   	 kI    kD      kF          Iz    PeakOut
-    public final static Gains kGains_Velocit  = new Gains( 0.08, 0.001, 3.5, 1023.0/20660.0,  300,  0.75);
+    public final static Gains kGains_Velocit  = new Gains( 0.05, 0.001, 3.5, 1023.0/20660.0,  300,  0.75);
 
   }
 

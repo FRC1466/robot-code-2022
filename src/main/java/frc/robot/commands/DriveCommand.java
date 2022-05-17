@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 import java.lang.Math;
@@ -46,9 +47,9 @@ public class DriveCommand extends CommandBase {
         
         for(int i = 0; i<pastForward.length; i++)
         if (pastForward[i]<0&&forward>0&&isLimit==true) {
-            stopIter=25;
+            stopIter=15;
         } else if (pastForward[i]>0&&forward<0&&isLimit==true) {
-            stopIter=25;
+            stopIter=15;
         }
 
         if (stopIter > 0) {
@@ -56,15 +57,15 @@ public class DriveCommand extends CommandBase {
             forward=0;
         }
 
-        if (isLimit) {
+        /* if (isLimit) {
             System.out.println(isLimit);
-        }
+        } */
 
         pastForward[listIter%pastForward.length] = forward;
         listIter++;
 
-        System.out.println(pastForward[(listIter-1)%pastForward.length]);
-        System.out.println(forward);
+        /* System.out.println(pastForward[(listIter-1)%pastForward.length]);
+        System.out.println(forward); */
 
         m_drive.arcadeDrive(-forward, rot);
     }
@@ -79,12 +80,14 @@ public class DriveCommand extends CommandBase {
         double absForw = Math.abs(forward);
         double absRot = Math.abs(rot);
 
+        rot = Math.pow(rot, 3);
+        forward = forward * DriveConstants.kDrivePercentActivePID;
 
         if (absRot > 0.10) {
             if (absForw > 0.50) {
                 rot = 1.2*rot;
             } else {
-                rot = 0.8*rot;
+                rot = 0.6*rot;
             }
 
         } else {
