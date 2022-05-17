@@ -10,11 +10,11 @@ public class DriveCommand extends CommandBase {
     private final DriveSubsystem m_drive;
     private final XboxController m_controller;
     private boolean m_isPID;
-    private double pastForw[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     private int limitIter = 0;
-    boolean isLimit = false;
-    boolean wasPositive = true;
-    int stopIter = 0;
+    private boolean isLimit = false;
+    private int stopIter = 0;
+    private int listIter = 0;
+    private double pastForward[] = {0, 0, 0, 0, 0};
     
     public DriveCommand(DriveSubsystem subsystem, XboxController controller, boolean PID) {
         m_drive = subsystem;
@@ -34,8 +34,8 @@ public class DriveCommand extends CommandBase {
         double rot = m_controller.getLeftX();
         double absForw = Math.abs(forward);
 
-        if (absForw > 0.7) {
-            limitIter = 5;
+        if (absForw > 0.5) {
+            limitIter = 20;
         }
         if (limitIter > 0) {
             limitIter--;
@@ -43,11 +43,12 @@ public class DriveCommand extends CommandBase {
         } else {
             isLimit = false;
         }
-
-        if (wasPositive==true&&forward<0&&isLimit==true) {
-            stopIter=5;
-        } else if (wasPositive==false&&forward>0&&isLimit==true) {
-            stopIter=5;
+        
+        for(int i = 0; i<pastForward.length; i++)
+        if (pastForward[i]<0&&forward>0&&isLimit==true) {
+            stopIter=25;
+        } else if (pastForward[i]>0&&forward<0&&isLimit==true) {
+            stopIter=25;
         }
 
         if (stopIter > 0) {
@@ -55,16 +56,15 @@ public class DriveCommand extends CommandBase {
             forward=0;
         }
 
-        if (forward > 0) {
-            wasPositive = true;
-        } else {
-            wasPositive = false;
+        if (isLimit) {
+            System.out.println(isLimit);
         }
 
-        if (isLimit) {
-            forward = 0;
-            isLimit = false;
-        }
+        pastForward[listIter%pastForward.length] = forward;
+        listIter++;
+
+        System.out.println(pastForward[(listIter-1)%pastForward.length]);
+        System.out.println(forward);
 
         m_drive.arcadeDrive(-forward, rot);
     }
@@ -78,35 +78,17 @@ public class DriveCommand extends CommandBase {
         double rot = m_controller.getLeftX();
         double absForw = Math.abs(forward);
         double absRot = Math.abs(rot);
-        double pastForw[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        int iter = 0;
-        double avgForw;
-
-        pastForw[iter%pastForw.length] = absForw;
-        iter++;
-
-        double sum = 0;
-        for (double d : pastForw) {
-            sum += d;
-        }
-        avgForw = sum / pastForw.length;
-
-
-
 
 
         if (absRot > 0.10) {
             if (absForw > 0.50) {
-                rot = 2*rot;
+                rot = 1.2*rot;
             } else {
                 rot = 0.8*rot;
             }
 
         } else {
         rot = 0;
-        }
-        if (avgForw > 0.5) {
-            forward = 0.1*forward;
         }
 
         m_drive.arcadeDrivePID(-forward, rot);
