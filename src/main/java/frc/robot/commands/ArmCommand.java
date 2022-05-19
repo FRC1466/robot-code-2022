@@ -10,7 +10,7 @@ import javax.swing.text.Position;
 public class ArmCommand extends CommandBase {
     private final IntakeSubsystem m_arm;
     private final XboxController m_controller;
-    private boolean isMoving;
+    private boolean isMoving = true;
     private double lastPos;
     private boolean isPosLocked = false;
     private boolean isScreaming = false;
@@ -34,13 +34,13 @@ public class ArmCommand extends CommandBase {
 
     @Override
     public void initialize() {
-
+        lastPos = -23000;
     }
 
     @Override
     public void execute() {
         double forward = m_controller.getRightY();
-        if (Math.abs(forward) < 0.10) {
+        /* if (Math.abs(forward) < 0.10) {
             forward = 0;
             isMoving = false;
             if (!isPosLocked) {
@@ -54,7 +54,15 @@ public class ArmCommand extends CommandBase {
             if (isPosLocked) {
                 isPosLocked = !isPosLocked;
             }
+        } */
+        if (m_controller.getRightStickButton()) {
+            if (!isPosLocked) {
+                isPosLocked = !isPosLocked;
+                lastPos = m_arm.getPosition();
+                System.out.println(lastPos + " toggled");
+            }
         }
+
 
         ScreamLimiter(); // make sure robot doesn't die when things go wrong
         if (isScreaming) {
@@ -67,6 +75,7 @@ public class ArmCommand extends CommandBase {
         if (m_controller.getXButton()) {
             System.out.println("Sensor Vel:" + m_arm.getVelocity());
             System.out.println("Sensor Pos:" + m_arm.getPosition());
+            System.out.println("Last Position:" + lastPos);
         }
 
     }

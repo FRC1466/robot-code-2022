@@ -35,8 +35,10 @@ public class DriveCommand extends CommandBase {
         double rot = m_controller.getLeftX();
         double absForw = Math.abs(forward);
 
-        if (absForw > 0.5) {
-            limitIter = 20;
+        rot = 0.80* rot;
+
+        if (absForw > 0.7) {
+            limitIter = 10;
         }
         if (limitIter > 0) {
             limitIter--;

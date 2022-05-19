@@ -24,6 +24,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ArmCommand;
+import frc.robot.commands.AutoCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -161,10 +162,16 @@ public class RobotContainer {
     // m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    return ramseteCommand
+
+
+    /* return ramseteCommand
         .andThen(() -> m_robotDrive.tankDriveVolts(0, 0))
         .andThen(() -> m_robotIntake.runRoller(0.22))
         .andThen(() -> AutoWait(500))
-        .andThen(() -> m_robotIntake.stopRoller());
+        .andThen(() -> m_robotIntake.stopRoller())
+        .andThen(new AutoCommand(m_robotDrive, -20000.0, 0.0)); */
+        return new AutoCommand(m_robotDrive, -20000.0, 0.0);
   }
+
+
 }

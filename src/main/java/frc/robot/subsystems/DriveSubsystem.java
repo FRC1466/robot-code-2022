@@ -181,6 +181,19 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
+  public void arcadeDriveAutoPID(double fwd, double rot) {
+    double targetRight = (fwd - rot);
+    double targetLeft = (fwd + rot);
+    for (int i=0; i<(motors.length/2); i++) {
+      motors[i].set(TalonFXControlMode.Position, targetLeft);
+      System.out.println(targetLeft);
+    }
+    for (int i=(motors.length/2); i<motors.length; i++) {
+      motors[i].set(TalonFXControlMode.Velocity, targetRight);
+      System.out.println(targetRight);
+    }
+  }
+
   /**
    * Controls the left and right sides of the drive directly with voltages.
    *
