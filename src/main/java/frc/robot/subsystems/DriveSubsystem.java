@@ -185,11 +185,11 @@ public class DriveSubsystem extends SubsystemBase {
     double targetRight = (fwd - rot);
     double targetLeft = (fwd + rot);
     for (int i=0; i<(motors.length/2); i++) {
-      motors[i].set(TalonFXControlMode.Position, targetLeft);
+      motors[i].set(TalonFXControlMode.Position, this.getCurrentPos()[i] + targetLeft);
       System.out.println(targetLeft);
     }
     for (int i=(motors.length/2); i<motors.length; i++) {
-      motors[i].set(TalonFXControlMode.Velocity, targetRight);
+      motors[i].set(TalonFXControlMode.Velocity, this.getCurrentPos()[i] + targetRight);
       System.out.println(targetRight);
     }
   }
@@ -240,6 +240,16 @@ public class DriveSubsystem extends SubsystemBase {
     return m_rightEncoder;
   }
 
+  public double[] getCurrentPos() {
+    double[] motorPos = {
+      motors[0].getSelectedSensorPosition(),
+      motors[1].getSelectedSensorPosition(),
+      motors[2].getSelectedSensorPosition(),
+      motors[3].getSelectedSensorPosition()
+    };
+    return motorPos;
+  }
+
   /**
    * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
    *
@@ -248,6 +258,15 @@ public class DriveSubsystem extends SubsystemBase {
   public void setMaxOutput(double maxOutput) {
     m_drive.setMaxOutput(maxOutput);
   }
+
+  public void setPeakOutputPID(double peakOutput) {
+    for (int i = 0; i < motors.length; i++) {
+      motors[i].configPeakOutputForward(peakOutput);
+      motors[i].configPeakOutputReverse(-peakOutput);
+    }
+  }
+
+
 
   /** Zeroes the heading of the robot.
   public void zeroHeading() {

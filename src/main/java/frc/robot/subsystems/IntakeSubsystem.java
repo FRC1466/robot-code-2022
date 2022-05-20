@@ -76,7 +76,7 @@ public class IntakeSubsystem extends SubsystemBase {
         // double targetVelocity_UnitsPer100ms = Constants.IntakeConstants.armPower * fwd * 2000.0 * 2048.0 / 600.0;
         if (isMoving) {
             // armMotors[1].set(fwd * Constants.IntakeConstants.armPower);
-            armMotors[1].set(TalonFXControlMode.Position, lastPos + (fwd*2048*9.5));
+            armMotors[1].set(TalonFXControlMode.Position, lastPos + (fwd*2048*IntakeConstants.armPosRangeModifier));
         } else {
             armMotors[1].set(TalonFXControlMode.Position, lastPos);
         }

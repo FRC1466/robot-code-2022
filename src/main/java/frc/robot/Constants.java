@@ -67,6 +67,8 @@ public final class Constants {
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
+
+    public static final double kPeakOutput = 0.2;
   }
 
   public static final class IntakeConstants {
@@ -82,10 +84,13 @@ public final class Constants {
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
 
+    public static final double armStartPos = -11500.0;
+    public static final double armPosRangeModifier = 9.8;
+
     private static final double Ku = 4;
     private static final double Tu = 0.7;
     //   0.35,0.001,0.2                                           kP: 4   	 kI    kD      kF          Iz    PeakOut
-    public final static Gains kGains_Velocit  = new Gains(0.05, 0.00005, 2.0, 0,  0,  0.2);
+    public final static Gains kGains_Velocit  = new Gains(0.035, 0.0000001, 2.0, 0,  0,  0.2);
 
   }
 
@@ -95,7 +100,7 @@ public final class Constants {
     public static final int kTimeoutMs = 30;
 
     //                                                    kP   	 kI    kD      kF          Iz    PeakOut
-    public final static Gains kGains_Velocit  = new Gains( 0.1, 0.001, 3.5, 1023.0/20660.0,  300,  0.75);
+    public final static Gains kGains_Velocit  = new Gains( 0.1, 0.001, 3.5, 1023.0/20660.0,  300,  0.5);
 
   }
 
