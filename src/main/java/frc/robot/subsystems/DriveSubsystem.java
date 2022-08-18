@@ -185,10 +185,10 @@ public class DriveSubsystem extends SubsystemBase {
     double targetRight = (fwd - rot);
     double targetLeft = (fwd + rot);
     for (int i=0; i<(motors.length/2); i++) {
-      motors[i].set(TalonFXControlMode.Position, motors[i].getSelectedSensorPosition() + targetLeft);
+      motors[i].set(TalonFXControlMode.Position, targetLeft);
     }
     for (int i=(motors.length/2); i<motors.length; i++) {
-      motors[i].set(TalonFXControlMode.Position, motors[i].getSelectedSensorPosition()  + targetRight);
+      motors[i].set(TalonFXControlMode.Position, targetRight);
     }
   }
 

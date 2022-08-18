@@ -15,6 +15,7 @@ public class AutoCommand extends CommandBase {
     private double m_fwd = 0;
     private double m_rot = 0;
     private boolean isDone = false;
+    private double m_initialPos = 0;
 
     public AutoCommand(DriveSubsystem subsystem, double fwd, double rot) {
         m_drive = subsystem;
@@ -22,6 +23,7 @@ public class AutoCommand extends CommandBase {
 
         m_fwd = fwd;
         m_rot = rot;
+        
     }
 
     
@@ -30,6 +32,8 @@ public class AutoCommand extends CommandBase {
     public void initialize() {
         // TODO Auto-generated method stub
         m_drive.setPeakOutputPID(AutoConstants.kPeakOutput);
+        m_initialPos = m_drive.getCurrentPos()[0];
+        m_fwd =+ m_initialPos;
     }
 
     @Override
