@@ -169,8 +169,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void arcadeDrivePID(double targetFwd, double targetRot) {
-    double targetVelocity_UnitsPer100msRight = (targetFwd - targetRot) * 2000.0 * 2048.0 / 600.0;
-    double targetVelocity_UnitsPer100msLeft = (targetFwd + targetRot) * 2000.0 * 2048.0 / 600.0;
+    double targetVelocity_UnitsPer100msRight = (targetFwd - targetRot) * 2000.0 * 2048.0 / 600.0 * DriveConstants.kDrivePercentDefaultPID;
+    double targetVelocity_UnitsPer100msLeft = (targetFwd + targetRot) * 2000.0 * 2048.0 / 600.0 * DriveConstants.kDrivePercentDefaultPID;
     for (int i=0; i<(motors.length/2); i++) {
       motors[i].set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100msLeft);
       System.out.println(targetVelocity_UnitsPer100msLeft);
@@ -185,12 +185,10 @@ public class DriveSubsystem extends SubsystemBase {
     double targetRight = (fwd - rot);
     double targetLeft = (fwd + rot);
     for (int i=0; i<(motors.length/2); i++) {
-      motors[i].set(TalonFXControlMode.Position, this.getCurrentPos()[i] + targetLeft);
-      System.out.println(targetLeft);
+      motors[i].set(TalonFXControlMode.Position, motors[i].getSelectedSensorPosition() + targetLeft);
     }
     for (int i=(motors.length/2); i<motors.length; i++) {
-      motors[i].set(TalonFXControlMode.Velocity, this.getCurrentPos()[i] + targetRight);
-      System.out.println(targetRight);
+      motors[i].set(TalonFXControlMode.Position, motors[i].getSelectedSensorPosition()  + targetRight);
     }
   }
 
@@ -248,6 +246,26 @@ public class DriveSubsystem extends SubsystemBase {
       motors[3].getSelectedSensorPosition()
     };
     return motorPos;
+  }
+
+  public double[] getCurrentError() {
+    double[] motorPos = {
+      motors[0].getClosedLoopError(),
+      motors[1].getClosedLoopError(),
+      motors[2].getClosedLoopError(),
+      motors[3].getClosedLoopError()
+    };
+    return motorPos;
+  }
+
+  public double[] getCurrentTarget() {
+    double[] currentTarget = {
+      motors[0].getClosedLoopTarget(),
+      motors[1].getClosedLoopTarget(),
+      motors[2].getClosedLoopTarget(),
+      motors[3].getClosedLoopTarget()
+    };
+    return currentTarget;
   }
 
   /**

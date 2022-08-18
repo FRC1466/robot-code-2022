@@ -49,9 +49,10 @@ public final class Constants {
     public static final double kPDriveVel = 5;
 
     // Drive limiters
-    public static final double kDrivePercentDefault = 0.35;
+    public static final double kDrivePercentDefault = 0.6;
     public static final double kDrivePercentActive = 0.20;
     public static final double kDrivePercentActivePID = 0.8;
+    public static final double kDrivePercentDefaultPID = 1.2;
 
   }
 
@@ -69,6 +70,9 @@ public final class Constants {
     public static final double kRamseteZeta = 0.7;
 
     public static final double kPeakOutput = 0.2;
+
+    public static final double kTestForward = -6000.0;
+    public static final double kTestForwardErrorLimit = 50.0;
   }
 
   public static final class IntakeConstants {
@@ -100,7 +104,7 @@ public final class Constants {
     public static final int kTimeoutMs = 30;
 
     //                                                    kP   	 kI    kD      kF          Iz    PeakOut
-    public final static Gains kGains_Velocit  = new Gains( 0.1, 0.001, 3.5, 1023.0/20660.0,  300,  0.5);
+    public final static Gains kGains_Velocit  = new Gains(0.4, 0.0001, 4.0, 0,  0,  0.6);
 
   }
 
