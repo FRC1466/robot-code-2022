@@ -56,31 +56,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    startTime = Timer.getFPGATimestamp() ;
+    
   }
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousPeriodic() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    double time = Timer.getFPGATimestamp();
-    if (time < 3) {
-      leftMotor1.set(0.6);
-      leftMotor2.set(0.6);
-      rightMotor1.set(0.6);
-      rightMotor2.set(0.6); 
-    }else{
-      leftMotor1.set(0);
-      leftMotor2.set(0);
-      rightMotor1.set(0);
-      rightMotor2.set(0); 
-    }
-    /*if (m_stick.getRawButton(3)){
-      m_frontfront.set(-1.0);
-    } else if (m_stick.getRawButton(4)) {
-
-    } else {
-      m_frontfront.set(0.0);
-    }*/
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -92,12 +73,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-  }
-
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {
-    
   }
 
   @Override
