@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -9,7 +10,7 @@ import java.lang.Math;
 
 public class DriveCommand extends CommandBase {
     private final DriveSubsystem m_drive;
-    private final XboxController m_controller;
+    private final Joystick m_controller;
     private boolean m_isPID;
     private int limitIter = 0;
     private boolean isLimit = false;
@@ -17,7 +18,7 @@ public class DriveCommand extends CommandBase {
     private int listIter = 0;
     private double pastForward[] = {0, 0, 0, 0, 0};
     
-    public DriveCommand(DriveSubsystem subsystem, XboxController controller, boolean PID) {
+    public DriveCommand(DriveSubsystem subsystem, Joystick controller, boolean PID) {
         m_drive = subsystem;
         addRequirements(m_drive);
         m_controller = controller;
@@ -29,10 +30,11 @@ public class DriveCommand extends CommandBase {
     }
 
     private void m_arcadeDrive() {
-        double pos = m_controller.getRightTriggerAxis();
-        double neg = m_controller.getLeftTriggerAxis();
-        double forward = pos - neg;
-        double rot = m_controller.getLeftX();
+        //double pos = m_controller.getRightTriggerAxis();
+        //double neg = m_controller.getLeftTriggerAxis();
+        //double forward = pos - neg;
+        double forward = m_controller.getY();
+        double rot = m_controller.getZ();
         double absForw = Math.abs(forward);
 
         rot = 0.80* rot;
@@ -75,10 +77,11 @@ public class DriveCommand extends CommandBase {
 
 
     private void m_arcadeDrivePID() {
-        double pos = m_controller.getRightTriggerAxis();
-        double neg = m_controller.getLeftTriggerAxis();
-        double forward = pos - neg;
-        double rot = m_controller.getLeftX();
+        //double pos = m_controller.getRightTriggerAxis();
+        //double neg = m_controller.getLeftTriggerAxis();
+        //double forward = pos - neg;
+        double forward = m_controller.getY();
+        double rot = m_controller.getZ();
         double absForw = Math.abs(forward);
         double absRot = Math.abs(rot);
 

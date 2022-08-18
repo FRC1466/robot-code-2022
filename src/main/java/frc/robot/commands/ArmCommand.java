@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.Constants.IntakeConstants;
@@ -10,14 +11,14 @@ import javax.swing.text.Position;
 
 public class ArmCommand extends CommandBase {
     private final IntakeSubsystem m_arm;
-    private final XboxController m_controller;
+    private final Joystick m_controller;
     private boolean isMoving = true;
     private double lastPos;
     private boolean isPosLocked = false;
     private boolean isScreaming = false;
     private int posIter = 0;
 
-    public ArmCommand(IntakeSubsystem subsystem, XboxController controller) {
+    public ArmCommand(IntakeSubsystem subsystem, Joystick controller) {
         m_arm = subsystem;
         addRequirements(m_arm);
         m_controller = controller;
@@ -40,7 +41,7 @@ public class ArmCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double forward = m_controller.getRightY();
+        double forward = m_controller.getThrottle();
         /* if (Math.abs(forward) < 0.10) {
             forward = 0;
             isMoving = false;
@@ -56,7 +57,7 @@ public class ArmCommand extends CommandBase {
                 isPosLocked = !isPosLocked;
             }
         } */
-        if (m_controller.getRightStickButton()) {
+        if (m_controller.getRawButton(11)) {
             if (!isPosLocked) {
                 isPosLocked = !isPosLocked;
                 lastPos = m_arm.getPosition();
@@ -73,7 +74,7 @@ public class ArmCommand extends CommandBase {
 
         m_arm.runArm(forward, isMoving, lastPos);
 
-        if (m_controller.getXButton()) {
+        if (m_controller.getTrigger()) {
             System.out.println("Sensor Vel:" + m_arm.getVelocity());
             System.out.println("Sensor Pos:" + m_arm.getPosition());
             System.out.println("Last Position:" + lastPos);

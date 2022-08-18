@@ -48,7 +48,7 @@ public class RobotContainer {
   
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  Joystick m_driverController = new Joystick(OIConstants.kDriverControllerPort);
   // The intake controller
   XboxController intakeController = new XboxController(OIConstants.IntakePort);
 
