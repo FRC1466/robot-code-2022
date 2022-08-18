@@ -48,6 +48,7 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  // The intake controller
   XboxController intakeController = new XboxController(OIConstants.IntakePort);
 
   DriveCommand m_DriveCommand = new DriveCommand(m_robotDrive, m_driverController, false);
@@ -86,9 +87,11 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whenPressed(() -> m_robotIntake.runRoller(Constants.IntakeConstants.rollerPower))
         .whenReleased(() -> m_robotIntake.stopRoller());
+        // Runs roller when right bumper is pressed on driver controller
     new JoystickButton(m_driverController, Button.kLeftBumper.value)
         .whenPressed(() -> m_robotIntake.runRoller(-Constants.IntakeConstants.rollerPower))
         .whenReleased(() -> m_robotIntake.stopRoller());
+        // Runs roller in reverse when left bumper is pressed on driver controller
     new JoystickButton(m_driverController, Button.kA.value)
         .whenPressed(m_DriveCommandPID)
         .whenReleased(m_DriveCommand);
