@@ -62,6 +62,7 @@ public class RobotContainer {
     configureButtonBindings();
     m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentDefault);
     m_auto = new AutoCommand(m_robotDrive, AutoConstants.kTestForward, AutoConstants.kTestRotate);
+    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " + AutoConstants.kTestForward);
     
 
     // Configure default commands

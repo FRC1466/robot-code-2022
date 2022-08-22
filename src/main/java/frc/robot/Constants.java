@@ -71,7 +71,7 @@ public final class Constants {
 
     public static final double kPeakOutput = 0.2;
 
-    public static final double kTestForward = -120000.0;
+    public static final double kTestForward = -2000.0;
     public static final double kTestRotate = 0.0;
     public static final double kTestForwardErrorLimit = 50.0;
   }

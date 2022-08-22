@@ -23,11 +23,17 @@ public class AutoCommand extends CommandBase {
 
         m_fwd = fwd;
         m_rot = rot;
-
         m_initialPos = m_drive.getCurrentPos()[0];
-        m_fwd =+ m_initialPos;
-        System.out.println("Set initial position.");
+        m_fwd = m_fwd + m_initialPos;
+
         
+    }
+
+    private void DebugErrors() {
+        System.out.println(m_drive.getCurrentTarget()[0] - m_drive.getCurrentPos()[0]);
+        System.out.println("Current Target: "+ m_drive.getCurrentTarget()[0]);
+        System.out.println("Current Pos: "+ m_drive.getCurrentPos()[0]);
+        System.out.println("fwd: "+ m_fwd);
     }
 
     
@@ -41,7 +47,8 @@ public class AutoCommand extends CommandBase {
     @Override
     public void execute() {
         m_drive.arcadeDriveAutoPID(m_fwd, m_rot);
-        System.out.println(m_drive.getCurrentTarget()[0] - m_drive.getCurrentPos()[0]);
+        // DebugErrors();
+        System.out.println("fwd: "+ m_fwd);
     }
 
     @Override
