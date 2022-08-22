@@ -17,6 +17,7 @@ public class ArmCommand extends CommandBase {
     private boolean isPosLocked = false;
     private boolean isScreaming = false;
     private int posIter = 0;
+    private double forward;
 
     public ArmCommand(IntakeSubsystem subsystem, Joystick controller) {
         m_arm = subsystem;
@@ -41,7 +42,14 @@ public class ArmCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double forward = m_controller.getThrottle();
+        
+        // = m_controller.getThrottle();
+        if (m_controller.getPOV() == 180) {
+            forward =+ 0.3;
+        }
+        else if (m_controller.getPOV() == 0) {
+            forward =+ - 0.3;
+        }
         /* if (Math.abs(forward) < 0.10) {
             forward = 0;
             isMoving = false;
@@ -71,6 +79,7 @@ public class ArmCommand extends CommandBase {
             forward = 0;
             isPosLocked = false;
         }
+        
 
         m_arm.runArm(forward, isMoving, lastPos);
 
