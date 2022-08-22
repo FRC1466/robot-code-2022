@@ -54,12 +54,14 @@ public class RobotContainer {
   DriveCommand m_DriveCommand = new DriveCommand(m_robotDrive, m_driverController, false);
   DriveCommand m_DriveCommandPID = new DriveCommand(m_robotDrive, m_driverController, true);
 
+  private AutoCommand m_auto;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
     m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentDefault);
-    
+    m_auto = new AutoCommand(m_robotDrive, AutoConstants.kTestForward, AutoConstants.kTestRotate);
     
 
     // Configure default commands
@@ -113,7 +115,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new AutoCommand(m_robotDrive, AutoConstants.kTestForward, 0.0);
+    return m_auto;
   }
 
 

@@ -23,6 +23,10 @@ public class AutoCommand extends CommandBase {
 
         m_fwd = fwd;
         m_rot = rot;
+
+        m_initialPos = m_drive.getCurrentPos()[0];
+        m_fwd =+ m_initialPos;
+        System.out.println("Set initial position.");
         
     }
 
@@ -32,8 +36,6 @@ public class AutoCommand extends CommandBase {
     public void initialize() {
         // TODO Auto-generated method stub
         m_drive.setPeakOutputPID(AutoConstants.kPeakOutput);
-        m_initialPos = m_drive.getCurrentPos()[0];
-        m_fwd =+ m_initialPos;
     }
 
     @Override
