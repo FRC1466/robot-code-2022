@@ -47,8 +47,7 @@ public class AutoCommand extends CommandBase {
     @Override
     public void execute() {
         m_drive.arcadeDriveAutoPID(m_fwd, m_rot);
-        // DebugErrors();
-        System.out.println("fwd: "+ m_fwd);
+        DebugErrors();
     }
 
     @Override

@@ -71,9 +71,12 @@ public final class Constants {
 
     public static final double kPeakOutput = 0.2;
 
-    public static final double kTestForward = -2000.0;
+    public static final double kTestForward = 20000.0;
     public static final double kTestRotate = 0.0;
     public static final double kTestForwardErrorLimit = 50.0;
+
+    public static final double kArmUp = -0.8;
+    public static final double kRollTime = 1.5;
   }
 
   public static final class IntakeConstants {

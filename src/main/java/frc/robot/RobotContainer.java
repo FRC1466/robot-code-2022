@@ -25,6 +25,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.AutoCommand;
+import frc.robot.commands.ComplexAuto;
+import frc.robot.commands.AutoArmCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -54,14 +56,15 @@ public class RobotContainer {
   DriveCommand m_DriveCommand = new DriveCommand(m_robotDrive, m_driverController, false);
   DriveCommand m_DriveCommandPID = new DriveCommand(m_robotDrive, m_driverController, true);
 
-  private AutoCommand m_auto;
+  private ComplexAuto m_auto;
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
     m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentDefault);
-    m_auto = new AutoCommand(m_robotDrive, AutoConstants.kTestForward, AutoConstants.kTestRotate);
+    m_auto = new ComplexAuto(m_robotDrive, m_robotIntake);
     System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " + AutoConstants.kTestForward);
     
 
@@ -115,9 +118,10 @@ public class RobotContainer {
     } catch (Exception e){}
   }
 
-  public Command getAutonomousCommand() {
+  public Command getAuto() {
     return m_auto;
   }
+
 
 
 }
