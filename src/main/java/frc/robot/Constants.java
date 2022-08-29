@@ -99,7 +99,7 @@ public final class Constants {
     private static final double Ku = 4;
     private static final double Tu = 0.7;
     //   0.35,0.001,0.2                                           kP: 4   	 kI    kD      kF          Iz    PeakOut
-    public final static Gains kGains_Velocit  = new Gains(0.035, 0.0000001, 2.0, 0.1,  0,  0.2);
+    public final static Gains kGains_Velocit  = new Gains(0.036, 0.0001, 0.2, 0,  0,  0.2);
 
   }
 
