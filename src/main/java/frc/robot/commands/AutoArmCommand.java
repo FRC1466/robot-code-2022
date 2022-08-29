@@ -47,13 +47,16 @@ public class AutoArmCommand extends CommandBase {
     @Override
     public void execute() {
         m_intake.runArm(m_pos, isMoving, lastPos);
-        System.out.println("Executing AutoArmCommand");
+        System.out.println("Executing AutoArmCommand: " + m_intake.getCurrentError());
         
     
     }
 
     @Override
     public boolean isFinished() {
+        if (Math.abs(m_intake.getCurrentError()) < AutoConstants.kArmErrorFinish) {
+            isCommandFinished = true;
+        }
         return isCommandFinished;
     }
 

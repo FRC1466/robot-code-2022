@@ -75,8 +75,9 @@ public final class Constants {
     public static final double kTestRotate = 0.0;
     public static final double kTestForwardErrorLimit = 50.0;
 
-    public static final double kArmUp = -0.8;
+    public static final double kArmUp = 0.8;
     public static final double kRollTime = 1.5;
+    public static final double kArmErrorFinish = 20.0;
   }
 
   public static final class IntakeConstants {
@@ -98,7 +99,7 @@ public final class Constants {
     private static final double Ku = 4;
     private static final double Tu = 0.7;
     //   0.35,0.001,0.2                                           kP: 4   	 kI    kD      kF          Iz    PeakOut
-    public final static Gains kGains_Velocit  = new Gains(0.035, 0.0000001, 2.0, 0,  0,  0.2);
+    public final static Gains kGains_Velocit  = new Gains(0.035, 0.0000001, 2.0, 0.1,  0,  0.2);
 
   }
 

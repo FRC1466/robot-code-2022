@@ -93,6 +93,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public double getPercentage() {
         return armMotors[1].getMotorOutputPercent();
     }
+    
+    public double getCurrentError() {
+        return armMotors[1].getClosedLoopError();
+    }
 
     
 
