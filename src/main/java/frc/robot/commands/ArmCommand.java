@@ -45,10 +45,10 @@ public class ArmCommand extends CommandBase {
         
         // = m_controller.getThrottle();
         if (m_controller.getPOV() == 180) {
-            forward =+ 0.3;
+            forward = 1;
         }
         else if (m_controller.getPOV() == 0) {
-            forward =+ - 0.3;
+            forward = - 1.0;
         }
         /* if (Math.abs(forward) < 0.10) {
             forward = 0;

@@ -57,7 +57,7 @@ public final class Constants {
   }
 
   public static final class OIConstants {
-    public static final int kDriverControllerPort = 1;
+    public static final int kDriverControllerPort = 4;
     public static final int IntakePort = 0;
   }
 
