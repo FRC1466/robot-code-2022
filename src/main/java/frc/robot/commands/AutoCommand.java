@@ -55,6 +55,7 @@ public class AutoCommand extends CommandBase {
         // TODO Auto-generated method stub
         if (Math.abs(m_drive.getCurrentError()[0]) < AutoConstants.kTestForwardErrorLimit) {
             isDone = true;
+            System.out.println("Drive done, error: " + m_drive.getCurrentError());
         }
         return isDone;
     }

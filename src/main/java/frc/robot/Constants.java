@@ -71,13 +71,13 @@ public final class Constants {
 
     public static final double kPeakOutput = 0.2;
 
-    public static final double kTestForward = 20000.0;
+    public static final double kTestForward = 20000;
     public static final double kTestRotate = 0.0;
     public static final double kTestForwardErrorLimit = 50.0;
 
-    public static final double kArmUp = 0.8;
+    public static final double kArmUp = -0.8;
     public static final double kRollTime = 1.5;
-    public static final double kArmErrorFinish = 20.0;
+    public static final double kArmErrorFinish = 80.0;
   }
 
   public static final class IntakeConstants {
@@ -93,13 +93,13 @@ public final class Constants {
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
 
-    public static final double armStartPos = -11500.0;
-    public static final double armPosRangeModifier = 9.8;
+    public static final double armStartPos = -16000.0;
+    public static final double armPosRangeModifier = 9.2;
 
     private static final double Ku = 4;
     private static final double Tu = 0.7;
     //   0.35,0.001,0.2                                           kP: 4   	 kI    kD      kF          Iz    PeakOut
-    public final static Gains kGains_Velocit  = new Gains(0.036, 0.0001, 0.1, 0,  0,  0.2);
+    public final static Gains kGains_Velocit  = new Gains(0.036, 0.00001, 0, 0,  0,  0.2);
 
   }
 

@@ -21,9 +21,10 @@ public class AutoArmCommand extends CommandBase {
 
     public AutoArmCommand(IntakeSubsystem intake, double pos) {
         m_intake = intake;
-        m_pos = 1000.0;
+        addRequirements(m_intake);
         timeToRoll = Constants.AutoConstants.kRollTime*1000/50; //convert to commanderscheduler cycles (20ms per cycle)
         lastPos = IntakeConstants.armStartPos;
+        m_pos = pos;
         System.out.println("Initialized AutoArmCommand class");
 
     }
@@ -56,6 +57,7 @@ public class AutoArmCommand extends CommandBase {
     public boolean isFinished() {
         if (Math.abs(m_intake.getCurrentError()) < AutoConstants.kArmErrorFinish) {
             isCommandFinished = true;
+            System.out.println("Finished Arm Movement");
         }
         return isCommandFinished;
     }
