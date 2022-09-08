@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 public class ComplexAuto extends SequentialCommandGroup {
 
+    private final DriveSubsystem m_drive;
+
     private void waitInAuto(int a) {
         try {
             TimeUnit.MILLISECONDS.wait(a);
@@ -19,12 +21,15 @@ public class ComplexAuto extends SequentialCommandGroup {
         }  
     }
 
-    public ComplexAuto(DriveSubsystem m_drive, IntakeSubsystem m_intake) {
+    public ComplexAuto(DriveSubsystem drive, IntakeSubsystem m_intake) {
         addCommands(
             new AutoArmCommand(m_intake, AutoConstants.kArmUp),
             new RunCommand(() -> m_intake.runRoller(1), m_intake).withTimeout(2),
             new RunCommand(() -> m_intake.stopRoller(), m_intake).withTimeout(1),
-            new AutoCommand(m_drive, AutoConstants.kTestForward, AutoConstants.kTestRotate)
+            new AutoCommand(drive, AutoConstants.kTestForward, AutoConstants.kTestRotate)
         );
+
+        m_drive = drive;
     }
+    
 }

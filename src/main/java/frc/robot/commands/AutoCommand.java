@@ -25,6 +25,7 @@ public class AutoCommand extends CommandBase {
         m_rot = rot;
         m_initialPos = m_drive.getCurrentPos()[0];
         m_fwd = m_fwd + m_initialPos;
+        m_drive.pacifyDrive();
 
         
     }
@@ -40,22 +41,26 @@ public class AutoCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        // TODO Auto-generated method stub
         m_drive.setPeakOutputPID(AutoConstants.kPeakOutput);
+        m_drive.pacifyDrive();
     }
 
     @Override
     public void execute() {
+        long start = System.currentTimeMillis();
+        m_drive.pacifyDrive();
         m_drive.arcadeDriveAutoPID(m_fwd, m_rot);
-        DebugErrors();
+        m_drive.pacifyDrive();
+        System.out.println(start - System.currentTimeMillis());
+        // DebugErrors();
     }
 
     @Override
     public boolean isFinished() {
-        // TODO Auto-generated method stub
         if (Math.abs(m_drive.getCurrentError()[0]) < AutoConstants.kTestForwardErrorLimit) {
             isDone = true;
             System.out.println("Drive done, error: " + m_drive.getCurrentError());
+            m_drive.pacifyDrive();
         }
         return isDone;
     }

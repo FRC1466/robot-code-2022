@@ -144,9 +144,6 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @return The current wheel speeds.
    */
-  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getRate(), m_rightEncoder.getRate());
-  }
 
   /**
    * Resets the odometry to the specified pose.
@@ -173,10 +170,12 @@ public class DriveSubsystem extends SubsystemBase {
     double targetVelocity_UnitsPer100msLeft = (targetFwd + targetRot) * 2000.0 * 2048.0 / 600.0 * DriveConstants.kDrivePercentDefaultPID;
     for (int i=0; i<(motors.length/2); i++) {
       motors[i].set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100msLeft);
+      m_drive.feed(); // REALLY IMPORTANT FOR DIFFERENTIAL DRIVE!!!
       System.out.println(targetVelocity_UnitsPer100msLeft);
     }
     for (int i=(motors.length/2); i<motors.length; i++) {
       motors[i].set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100msRight);
+      m_drive.feed();
       System.out.println(targetVelocity_UnitsPer100msRight);
     }
   }
@@ -186,9 +185,13 @@ public class DriveSubsystem extends SubsystemBase {
     double targetLeft = (fwd + rot);
     for (int i=0; i<(motors.length/2); i++) {
       motors[i].set(TalonFXControlMode.Position, targetLeft);
+      m_drive.feed(); // REALLY IMPORTANT FOR DIFFERENTIAL DRIVE!!!
+      System.out.println("fed");
     }
     for (int i=(motors.length/2); i<motors.length; i++) {
       motors[i].set(TalonFXControlMode.Position, targetRight);
+      m_drive.feed();
+      System.out.println("fed");
     }
   }
 
@@ -275,6 +278,10 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void setMaxOutput(double maxOutput) {
     m_drive.setMaxOutput(maxOutput);
+  }
+
+  public void pacifyDrive() {
+    m_drive.feed();
   }
 
   public void setPeakOutputPID(double peakOutput) {
