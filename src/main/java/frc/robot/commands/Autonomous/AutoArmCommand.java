@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Autonomous;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -6,6 +6,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PIDConstants;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 import java.lang.Math;
@@ -13,15 +14,18 @@ import java.util.concurrent.TimeUnit;
 
 public class AutoArmCommand extends CommandBase {
     private final IntakeSubsystem m_intake;
+    private final DriveSubsystem m_drive;
     private double m_pos;
     private double lastPos;
     private boolean isMoving = true;
     private boolean isCommandFinished = false;
     private double timeToRoll;
 
-    public AutoArmCommand(IntakeSubsystem intake, double pos) {
+    public AutoArmCommand(IntakeSubsystem intake, DriveSubsystem drive, double pos) {
         m_intake = intake;
+        m_drive = drive;
         addRequirements(m_intake);
+        addRequirements(m_drive);
         timeToRoll = Constants.AutoConstants.kRollTime*1000/50; //convert to commanderscheduler cycles (20ms per cycle)
         lastPos = IntakeConstants.armStartPos;
         m_pos = pos;
@@ -48,6 +52,7 @@ public class AutoArmCommand extends CommandBase {
     @Override
     public void execute() {
         m_intake.runArm(m_pos, isMoving, lastPos);
+        m_drive.pacifyDrive();
         System.out.println("Executing AutoArmCommand: " + m_intake.getCurrentError());
         
     

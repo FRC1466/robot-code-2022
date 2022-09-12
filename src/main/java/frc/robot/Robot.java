@@ -19,6 +19,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private Command m_armAutonomousCommand;
 
+  private boolean isAutoDone;
+
   private RobotContainer m_robotContainer;
 
   /**
@@ -71,8 +73,9 @@ public class Robot extends TimedRobot {
 
     // schedule the autonomous command (example)
 
-    if (m_autonomousCommand != null) {
+    if ((m_autonomousCommand != null) && (!isAutoDone)) {
       m_autonomousCommand.schedule();
+      isAutoDone = true;
     }
   }
 

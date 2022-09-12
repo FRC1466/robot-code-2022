@@ -95,14 +95,14 @@ public class DriveSubsystem extends SubsystemBase {
       /* Config the peak and nominal outputs */
       motors[i].configNominalOutputForward(0, PIDConstants.kTimeoutMs);
       motors[i].configNominalOutputReverse(0, PIDConstants.kTimeoutMs);
-      motors[i].configPeakOutputForward(PIDConstants.kGains_Velocit.kPeakOutput, PIDConstants.kTimeoutMs);
-      motors[i].configPeakOutputReverse(-PIDConstants.kGains_Velocit.kPeakOutput, PIDConstants.kTimeoutMs);
+      motors[i].configPeakOutputForward(PIDConstants.kDriveGainsVelocity.kPeakOutput, PIDConstants.kTimeoutMs);
+      motors[i].configPeakOutputReverse(-PIDConstants.kDriveGainsVelocity.kPeakOutput, PIDConstants.kTimeoutMs);
 
       /* Config the Velocity closed loop gains in slot0 */
-      motors[i].config_kF(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kF, PIDConstants.kTimeoutMs);
-      motors[i].config_kP(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kP, PIDConstants.kTimeoutMs);
-      motors[i].config_kI(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kI, PIDConstants.kTimeoutMs);
-      motors[i].config_kD(PIDConstants.kPIDLoopIdx, PIDConstants.kGains_Velocit.kD, PIDConstants.kTimeoutMs);
+      motors[i].config_kF(PIDConstants.kPIDLoopIdx, PIDConstants.kDriveGainsVelocity.kF, PIDConstants.kTimeoutMs);
+      motors[i].config_kP(PIDConstants.kPIDLoopIdx, PIDConstants.kDriveGainsVelocity.kP, PIDConstants.kTimeoutMs);
+      motors[i].config_kI(PIDConstants.kPIDLoopIdx, PIDConstants.kDriveGainsVelocity.kI, PIDConstants.kTimeoutMs);
+      motors[i].config_kD(PIDConstants.kPIDLoopIdx, PIDConstants.kDriveGainsVelocity.kD, PIDConstants.kTimeoutMs);
     }
   }
 

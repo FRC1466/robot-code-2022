@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.Autonomous;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -23,9 +23,9 @@ public class ComplexAuto extends SequentialCommandGroup {
 
     public ComplexAuto(DriveSubsystem drive, IntakeSubsystem m_intake) {
         addCommands(
-            new AutoArmCommand(m_intake, AutoConstants.kArmUp),
-            new RunCommand(() -> m_intake.runRoller(1), m_intake).withTimeout(2),
-            new RunCommand(() -> m_intake.stopRoller(), m_intake).withTimeout(1),
+            new AutoArmCommand(m_intake, drive, AutoConstants.kArmUp),
+            new AutoRoller(m_intake, drive, true),
+            new AutoRoller(m_intake, drive, false),
             new AutoCommand(drive, AutoConstants.kTestForward, AutoConstants.kTestRotate)
         );
 

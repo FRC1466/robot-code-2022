@@ -23,10 +23,10 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.Autonomous.AutoArmCommand;
+import frc.robot.commands.Autonomous.AutoCommand;
+import frc.robot.commands.Autonomous.ComplexAuto;
 import frc.robot.commands.ArmCommand;
-import frc.robot.commands.AutoCommand;
-import frc.robot.commands.ComplexAuto;
-import frc.robot.commands.AutoArmCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -51,7 +51,7 @@ public class RobotContainer {
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   // The intake controller
-  XboxController intakeController = new XboxController(OIConstants.IntakePort);
+  XboxController m_intakeController = new XboxController(OIConstants.IntakePort);
 
   DriveCommand m_DriveCommand = new DriveCommand(m_robotDrive, m_driverController, false);
   DriveCommand m_DriveCommandPID = new DriveCommand(m_robotDrive, m_driverController, true);
@@ -75,7 +75,7 @@ public class RobotContainer {
     );
 
     m_robotIntake.setDefaultCommand(
-        new ArmCommand(m_robotIntake, m_driverController));
+        new ArmCommand(m_robotIntake, m_intakeController));
   }
 
 
@@ -90,11 +90,11 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value)
         .whenPressed(() -> m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentActive))
         .whenReleased(() -> m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentDefault));
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
+    new JoystickButton(m_intakeController, Button.kRightBumper.value)
         .whenPressed(() -> m_robotIntake.runRoller(Constants.IntakeConstants.rollerPower))
         .whenReleased(() -> m_robotIntake.stopRoller());
         // Runs roller when right bumper is pressed on driver controller
-    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+    new JoystickButton(m_intakeController, Button.kLeftBumper.value)
         .whenPressed(() -> m_robotIntake.runRoller(-Constants.IntakeConstants.rollerPower))
         .whenReleased(() -> m_robotIntake.stopRoller());
         // Runs roller in reverse when left bumper is pressed on driver controller
