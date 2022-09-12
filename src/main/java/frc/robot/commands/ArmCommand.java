@@ -40,7 +40,7 @@ public class ArmCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double forward = m_controller.getRightY();
+        double forward = m_controller.getLeftY();
         forward = Math.pow(forward, 3);
         /* if (Math.abs(forward) < 0.10) {
             forward = 0;

@@ -35,8 +35,8 @@ public class DriveCommand extends CommandBase {
         double rot = m_controller.getLeftX();
         double absForw = Math.abs(forward);
 
-        rot = 0.80* rot;
-        forward = Math.pow(forward , 3); // Scaling of inputs
+        rot = 0.60* rot;
+        forward = Math.pow(forward , 1.5); // Scaling of inputs
 
         if (absForw > 0.7) {
             limitIter = 10; // start timer if power is too high
@@ -84,7 +84,7 @@ public class DriveCommand extends CommandBase {
         double absForw = Math.abs(forward);
         double absRot = Math.abs(rot);
 
-        rot = Math.pow(rot, 3); // scale inputs
+        rot = Math.pow(rot, 3) * 0.8; // scale inputs
         forward = forward * DriveConstants.kDrivePercentActivePID;
 
         if (absRot > 0.10) { // input logic
