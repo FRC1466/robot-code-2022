@@ -26,7 +26,7 @@ import java.lang.Math;
 
 public class DriveSubsystem extends SubsystemBase {
 
-  // motor array
+  // motor array in a list for easy access (could do dict in future?)
   WPI_TalonFX[] motors = new WPI_TalonFX[] {
     new WPI_TalonFX(DriveConstants.kLeftMotor1Port),  // motors[0] = left1
     new WPI_TalonFX(DriveConstants.kLeftMotor2Port),  // motors[1] = left2
@@ -44,47 +44,23 @@ public class DriveSubsystem extends SubsystemBase {
       new MotorControllerGroup(motors[0], motors[1]), 
       new MotorControllerGroup(motors[2], motors[3]));
 
-  // The left-side drive encoder
-  private final Encoder m_leftEncoder =
-      new Encoder(
-          DriveConstants.kLeftEncoderPorts[0],
-          DriveConstants.kLeftEncoderPorts[1],
-          DriveConstants.kLeftEncoderReversed);
-
-  // The right-side drive encoder
-  private final Encoder m_rightEncoder =
-      new Encoder(
-          DriveConstants.kRightEncoderPorts[0],
-          DriveConstants.kRightEncoderPorts[1],
-          DriveConstants.kRightEncoderReversed);
-
-  // The gyro sensor
-  private final Gyro m_gyro = new ADXRS450_Gyro();
-
-  // Odometry class for tracking robot pose
-  private final DifferentialDriveOdometry m_odometry;
-
-  private void initializeMotors() {
-
-  for (int i=0; i<motors.length; i++) {
-    motors[i].configFactoryDefault();
-    motors[i].set(ControlMode.PercentOutput, 0);
-    motors[i].setNeutralMode(NeutralMode.Brake);
-    motors[i].configNeutralDeadband(0.001);
-    if (i < 2)
-    {
-      motors[i].setInverted(TalonFXInvertType.CounterClockwise);
-    } else {
-      motors[i].setInverted(TalonFXInvertType.Clockwise);
+  private void initializeMotors() { //set configs of motors
+    for (int i=0; i<motors.length; i++) {
+      motors[i].configFactoryDefault();
+      motors[i].set(ControlMode.PercentOutput, 0);
+      motors[i].setNeutralMode(NeutralMode.Brake);
+      motors[i].configNeutralDeadband(0.001);
+      if (i < 2)
+      {
+        motors[i].setInverted(TalonFXInvertType.CounterClockwise);
+      } else {
+        motors[i].setInverted(TalonFXInvertType.Clockwise);
+      }
     }
-
-
-  }
-
   }
   
 
-  private void initializePID() { //help there's so much
+  private void initializePID() { //set configs of PID
     for (int i=0; i<motors.length; i++) 
     {
       motors[i].configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor,
@@ -114,46 +90,14 @@ public class DriveSubsystem extends SubsystemBase {
 
     initializeMotors();
     initializePID();
-
-    // Sets the distance per pulse for the encoders
-    m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
-    m_rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
-
-    resetEncoders();
-    m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
   }
 
   @Override
   public void periodic() {
-    // Update the odometry in the periodic block
-    m_odometry.update(
-        m_gyro.getRotation2d(), m_leftEncoder.getDistance(), m_rightEncoder.getDistance());
+
   }
 
-  /**
-   * Returns the currently-estimated pose of the robot.
-   *
-   * @return The pose.
-   */
-  public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
-  }
 
-  /**
-   * Returns the current wheel speeds of the robot.
-   *
-   * @return The current wheel speeds.
-   */
-
-  /**
-   * Resets the odometry to the specified pose.
-   *
-   * @param pose The pose to which to set the odometry.
-   
-  public void resetOdometry(Pose2d pose) {
-    resetEncoders();
-    m_odometry.resetPosition(pose, m_gyro.getRotation2d());
-  } */
 
   /**
    * Drives the robot using arcade controls.
@@ -165,6 +109,12 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.arcadeDrive(fwd, rot);
   }
 
+  /**
+   * Drives the robot using PID velocity
+   * 
+   * @param targetFwd the target forward velocity
+   * @param targetRot the target rotation velocity
+   */
   public void arcadeDrivePID(double targetFwd, double targetRot) {
     double targetVelocity_UnitsPer100msRight = (targetFwd - targetRot) * 2000.0 * 2048.0 / 600.0 * DriveConstants.kDrivePercentDefaultPID;
     double targetVelocity_UnitsPer100msLeft = (targetFwd + targetRot) * 2000.0 * 2048.0 / 600.0 * DriveConstants.kDrivePercentDefaultPID;
@@ -180,6 +130,12 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
+  /**
+   * Drives the robot using position PID
+   * 
+   * @param fwd the target forward position
+   * @param rot the target rotation position
+   */
   public void arcadeDriveAutoPID(double fwd, double rot) {
     double targetRight = (fwd - rot);
     double targetLeft = (fwd + rot);
@@ -208,39 +164,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.feed();
   }
 
-  /** Resets the drive encoders to currently read a position of 0. */
-  public void resetEncoders() {
-    m_leftEncoder.reset();
-    m_rightEncoder.reset();
-  }
-
   /**
-   * Gets the average distance of the two encoders.
-   *
-   * @return the average of the two encoder readings
+   * Gets current position of motors in a list
+   * @return current position of motors in a list
    */
-  public double getAverageEncoderDistance() {
-    return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
-  }
-
-  /**
-   * Gets the left drive encoder.
-   *
-   * @return the left drive encoder
-   */
-  public Encoder getLeftEncoder() {
-    return m_leftEncoder;
-  }
-
-  /**
-   * Gets the right drive encoder.
-   *
-   * @return the right drive encoder
-   */
-  public Encoder getRightEncoder() {
-    return m_rightEncoder;
-  }
-
   public double[] getCurrentPos() {
     double[] motorPos = {
       motors[0].getSelectedSensorPosition(),
@@ -251,6 +178,11 @@ public class DriveSubsystem extends SubsystemBase {
     return motorPos;
   }
 
+  /**
+   * Gets current error of motors in a list
+   * @return current error of motors in a list
+   *
+   */
   public double[] getCurrentError() {
     double[] motorPos = {
       motors[0].getClosedLoopError(),
@@ -261,6 +193,11 @@ public class DriveSubsystem extends SubsystemBase {
     return motorPos;
   }
 
+  /**
+   * Gets current target of motors in a list
+   * @return current target of motors in a list
+   *
+   */
   public double[] getCurrentTarget() {
     double[] currentTarget = {
       motors[0].getClosedLoopTarget(),
@@ -280,10 +217,17 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.setMaxOutput(maxOutput);
   }
 
+  /**
+   * Feeds differential drive.
+   */
   public void pacifyDrive() {
     m_drive.feed();
   }
 
+  /**
+   * Sets the maximum output of the PID in motors
+   * @param peakOutput the peak output
+   */
   public void setPeakOutputPID(double peakOutput) {
     for (int i = 0; i < motors.length; i++) {
       motors[i].configPeakOutputForward(peakOutput);
@@ -291,30 +235,4 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-
-
-  /** Zeroes the heading of the robot.
-  public void zeroHeading() {
-    m_gyro.reset();
-  }
-
-  /*
-
-  /**
-   * Returns the heading of the robot.
-   *
-   * @return the robot's heading in degrees, from -180 to 180
-   
-  public double getHeading() {
-    return m_gyro.getRotation2d().getDegrees();
-  } */
-
-  /**
-   * Returns the turn rate of the robot.
-   *
-   * @return The turn rate of the robot, in degrees per second
-   
-  public double getTurnRate() {
-    return -m_gyro.getRate();
-  } */
 }

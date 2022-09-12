@@ -36,34 +36,36 @@ public class DriveCommand extends CommandBase {
         double absForw = Math.abs(forward);
 
         rot = 0.80* rot;
+        forward = Math.pow(forward , 3); // Scaling of inputs
 
         if (absForw > 0.7) {
-            limitIter = 10;
+            limitIter = 10; // start timer if power is too high
         }
         if (limitIter > 0) {
             limitIter--;
-            isLimit = true;
+            isLimit = true; // lower timer and set bool
         } else {
             isLimit = false;
         }
         
-        for(int i = 0; i<pastForward.length; i++)
-        if (pastForward[i]<0&&forward>0&&isLimit==true) {
-            stopIter=15;
-        } else if (pastForward[i]>0&&forward<0&&isLimit==true) {
-            stopIter=15;
+        for(int i = 0; i<pastForward.length; i++) {
+            if (pastForward[i]<0&&forward>0&&isLimit==true) {
+                stopIter=15;
+            } else if (pastForward[i]>0&&forward<0&&isLimit==true) { // logic for limiter, set limiter for a certain time
+                stopIter=15;
+            }
         }
 
         if (stopIter > 0) {
             stopIter--;
-            forward=0;
+            forward=0; // lower limiter time and set into effect limiter
         }
 
         /* if (isLimit) {
             System.out.println(isLimit);
         } */
 
-        pastForward[listIter%pastForward.length] = forward;
+        pastForward[listIter%pastForward.length] = forward; // set lists and iter
         listIter++;
 
         /* System.out.println(pastForward[(listIter-1)%pastForward.length]);
@@ -82,10 +84,10 @@ public class DriveCommand extends CommandBase {
         double absForw = Math.abs(forward);
         double absRot = Math.abs(rot);
 
-        rot = Math.pow(rot, 3);
+        rot = Math.pow(rot, 3); // scale inputs
         forward = forward * DriveConstants.kDrivePercentActivePID;
 
-        if (absRot > 0.10) {
+        if (absRot > 0.10) { // input logic
             if (absForw > 0.50) {
                 rot = 1.2*rot;
             } else {

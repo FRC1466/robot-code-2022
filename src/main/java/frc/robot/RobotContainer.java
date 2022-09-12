@@ -53,19 +53,21 @@ public class RobotContainer {
   // The intake controller
   XboxController m_intakeController = new XboxController(OIConstants.IntakePort);
 
+  // the default commands
   DriveCommand m_DriveCommand = new DriveCommand(m_robotDrive, m_driverController, false);
   DriveCommand m_DriveCommandPID = new DriveCommand(m_robotDrive, m_driverController, true);
+  ArmCommand m_ArmCommand = new ArmCommand(m_robotIntake, m_intakeController);
 
-  private ComplexAuto m_auto;
+
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    // max output of drivesubsystem
     m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentDefault);
-    m_auto = new ComplexAuto(m_robotDrive, m_robotIntake);
-    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: " + AutoConstants.kTestForward);
     
 
     // Configure default commands
@@ -75,7 +77,8 @@ public class RobotContainer {
     );
 
     m_robotIntake.setDefaultCommand(
-        new ArmCommand(m_robotIntake, m_intakeController));
+        m_ArmCommand
+    );
   }
 
 
@@ -86,7 +89,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    // Drive at half speed when the right bumper is held
+    // Drive at half speed when B is held
     new JoystickButton(m_driverController, Button.kB.value)
         .whenPressed(() -> m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentActive))
         .whenReleased(() -> m_robotDrive.setMaxOutput(DriveConstants.kDrivePercentDefault));
@@ -101,6 +104,7 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kA.value)
         .whenPressed(m_DriveCommandPID)
         .whenReleased(m_DriveCommand);
+        // A button is for PID
     }
     
 
@@ -112,14 +116,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
 
-  private void AutoWait(int millis) {
-    try {
-        Thread.sleep(millis);
-    } catch (Exception e){}
-  }
 
   public Command getAuto() {
-    return m_auto;
+    return new ComplexAuto(m_robotDrive, m_robotIntake);
   }
 
 
