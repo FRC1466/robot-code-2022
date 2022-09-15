@@ -11,25 +11,14 @@ import java.util.concurrent.TimeUnit;
 
 public class ComplexAuto extends SequentialCommandGroup {
 
-    private final DriveSubsystem m_drive;
-
-    private void waitInAuto(int a) {
-        try {
-            TimeUnit.MILLISECONDS.wait(a);
-        } catch (Exception e) {
-            System.out.println("Auto wait hasn't worked");
-        }  
-    }
-
     public ComplexAuto(DriveSubsystem drive, IntakeSubsystem m_intake) {
         addCommands(
             new AutoArmCommand(m_intake, drive, AutoConstants.kArmUp),
-            new AutoRoller(m_intake, drive, true),
-            new AutoRoller(m_intake, drive, false),
+            new WaitCommand(2),
+            new AutoRoller(m_intake, drive, true).withTimeout(2),
+            new AutoRoller(m_intake, drive, false).withTimeout(2),
             new AutoCommand(drive, AutoConstants.kTestForward, AutoConstants.kTestRotate)
         );
-
-        m_drive = drive;
     }
     
 }
