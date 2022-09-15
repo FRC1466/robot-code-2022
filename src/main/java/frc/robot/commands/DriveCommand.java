@@ -35,8 +35,8 @@ public class DriveCommand extends CommandBase {
         double rot = m_controller.getLeftX();
         double absForw = Math.abs(forward);
 
-        rot = 0.60* rot;
-        forward = Math.pow(forward , 1.5); // Scaling of inputs
+        rot = 0.60* rot; // Scaling of inputs
+        forward = 0.8* forward;
 
         if (absForw > 0.7) {
             limitIter = 10; // start timer if power is too high

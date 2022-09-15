@@ -25,7 +25,7 @@ public class AutoRoller extends CommandBase {
         
         m_drive.pacifyDrive();
         if(m_isRoll) {
-            m_intake.runRoller(0.8);
+            m_intake.runRoller(-0.8);
         } else {
             m_intake.stopRoller();
         }

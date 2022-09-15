@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PIDConstants;
+import pabeles.concurrency.IntOperatorTask.Max;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -74,9 +75,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void runArm(double fwd, boolean isMoving, double lastPos) {
         // double targetVelocity_UnitsPer100ms = Constants.IntakeConstants.armPower * fwd * 2000.0 * 2048.0 / 600.0;
+        double setPoint = lastPos + fwd*2048*IntakeConstants.armPosRangeModifier;
+        // setPoint = Math.max(setPoint, 0);
+
         if (isMoving) {
             // armMotors[1].set(fwd * Constants.IntakeConstants.armPower);
-            armMotors[1].set(TalonFXControlMode.Position, lastPos + (fwd*2048*IntakeConstants.armPosRangeModifier));
+            armMotors[1].set(TalonFXControlMode.Position, setPoint);
         } else {
             armMotors[1].set(TalonFXControlMode.Position, lastPos);
         }

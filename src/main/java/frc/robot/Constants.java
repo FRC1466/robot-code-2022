@@ -93,8 +93,8 @@ public final class Constants {
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
 
-    public static final double armStartPos = -15000.0 ;
-    public static final double armPosRangeModifier = 8.5;
+    public static final double armStartPos = -15500.0 ;
+    public static final double armPosRangeModifier = 9.6;
 
     private static final double Ku = 4;
     private static final double Tu = 0.7;
@@ -110,7 +110,7 @@ public final class Constants {
     //                                                    kP   	 kI    kD      kF          Iz    PeakOut
     public final static Gains kDriveGainsVelocity  = new Gains(0.4, 0.0001, 4.0, 0,  0,  0.6);
     //   0.35,0.001,0.2                                           kP: 4   	 kI    kD      kF          Iz    PeakOut
-    public final static Gains kIntakeGains  = new Gains(0.034, 0.0001, 0, 0,  0,  0.25);
+    public final static Gains kIntakeGains  = new Gains(0.034, 0.00001, 0, 0,  0,  0.25);
   }
 
 }
