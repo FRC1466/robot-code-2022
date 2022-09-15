@@ -14,7 +14,7 @@ public class ComplexAuto extends SequentialCommandGroup {
     public ComplexAuto(DriveSubsystem drive, IntakeSubsystem m_intake) {
         addCommands(
             new AutoArmCommand(m_intake, drive, AutoConstants.kArmUp),
-            // new WaitCommand(2),
+            new WaitCommand(2),
             new AutoRoller(m_intake, drive, true).withTimeout(2),
             new AutoRoller(m_intake, drive, false).withTimeout(2),
             new AutoCommand(drive, AutoConstants.kTestForward, AutoConstants.kTestRotate)
