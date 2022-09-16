@@ -19,28 +19,17 @@ public class AutoArmCommand extends CommandBase {
     private double lastPos;
     private boolean isMoving = true;
     private boolean isCommandFinished = false;
-    private double timeToRoll;
 
     public AutoArmCommand(IntakeSubsystem intake, DriveSubsystem drive, double pos) {
         m_intake = intake;
         m_drive = drive;
         addRequirements(m_intake);
         addRequirements(m_drive);
-        timeToRoll = Constants.AutoConstants.kRollTime*1000/50; //convert to commanderscheduler cycles (20ms per cycle)
+
         lastPos = IntakeConstants.armStartPos;
         m_pos = pos;
         System.out.println("Initialized AutoArmCommand class");
 
-    }
-
-    private void SpinRoller(boolean isSpinning) {
-        if (isSpinning) {
-            m_intake.runRoller(1);
-        } else {
-            m_intake.stopRoller();
-        }
-        
-        
     }
 
     @Override
