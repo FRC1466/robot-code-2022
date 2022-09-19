@@ -10,7 +10,7 @@ public class AutoRoller extends CommandBase {
     private boolean m_isRoll;
 
 
-    AutoRoller(IntakeSubsystem intake, DriveSubsystem drive, boolean isRoll) {
+    public AutoRoller(IntakeSubsystem intake, DriveSubsystem drive, boolean isRoll) {
         m_intake = intake;
         m_drive = drive;
         addRequirements(m_intake);
@@ -25,7 +25,7 @@ public class AutoRoller extends CommandBase {
         
         m_drive.pacifyDrive();
         if(m_isRoll) {
-            m_intake.runRoller(-0.8);
+            m_intake.runRoller(-1.6);
         } else {
             m_intake.stopRoller();
         }

@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -16,6 +17,8 @@ public class DriveCommand extends CommandBase {
     private int stopIter = 0;
     private int listIter = 0;
     private double pastForward[] = {0, 0, 0, 0, 0};
+    private double forward;
+    private double rot;
     
     public DriveCommand(DriveSubsystem subsystem, XboxController controller, boolean PID) {
         m_drive = subsystem;
@@ -31,8 +34,8 @@ public class DriveCommand extends CommandBase {
     private void m_arcadeDrive() {
         double pos = m_controller.getRightTriggerAxis();
         double neg = m_controller.getLeftTriggerAxis();
-        double forward = pos - neg;
-        double rot = m_controller.getLeftX();
+        forward = pos - neg;
+        rot = m_controller.getLeftX();
         double absForw = Math.abs(forward);
 
         rot = 0.60* rot; // Scaling of inputs
@@ -79,13 +82,14 @@ public class DriveCommand extends CommandBase {
     private void m_arcadeDrivePID() {
         double pos = m_controller.getRightTriggerAxis();
         double neg = m_controller.getLeftTriggerAxis();
-        double forward = pos - neg;
-        double rot = m_controller.getLeftX();
+        forward = pos - neg;
+        rot = m_controller.getLeftX();
         double absForw = Math.abs(forward);
         double absRot = Math.abs(rot);
 
         rot = Math.pow(rot, 3) * 0.8; // scale inputs
-        forward = forward * DriveConstants.kDrivePercentActivePID;
+        forward = Math.pow(forward, 3);
+
 
         if (absRot > 0.10) { // input logic
             if (absForw > 0.50) {
@@ -101,6 +105,19 @@ public class DriveCommand extends CommandBase {
         m_drive.arcadeDrivePID(-forward, rot);
     }
 
+    private void updateSmartDashboard() {
+        SmartDashboard.putNumber("forward", forward);
+        SmartDashboard.putNumber("rotation", rot);
+    }
+
+    private void updateSmartDashboardPID() {
+        SmartDashboard.putNumber("forward", forward);
+        SmartDashboard.putNumber("rotation", rot);
+        SmartDashboard.putNumber("Drive position", m_drive.getCurrentPos()[0]);
+        SmartDashboard.putNumber("Drive error", m_drive.getCurrentError()[0]);
+        SmartDashboard.putBoolean("PID active", m_isPID);
+    }
+
     @Override
     public void initialize() {
         
@@ -110,9 +127,11 @@ public class DriveCommand extends CommandBase {
     public void execute() {
         if (m_isPID) {
             m_arcadeDrivePID();
+            updateSmartDashboardPID();
         }
         else {
             m_arcadeDrive();
+            updateSmartDashboard();
         }
     }
 }

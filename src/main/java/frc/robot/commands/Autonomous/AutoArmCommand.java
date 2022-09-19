@@ -40,7 +40,7 @@ public class AutoArmCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_intake.runArm(m_pos, isMoving, lastPos);
+        m_intake.runArm(m_pos, isMoving, lastPos, 0);
         m_drive.pacifyDrive();
         System.out.println("Executing AutoArmCommand: " + m_intake.getCurrentError());
         

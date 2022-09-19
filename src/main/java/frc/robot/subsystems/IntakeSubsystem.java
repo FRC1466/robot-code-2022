@@ -35,6 +35,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private void initializeMotors() {
         armMotors[0].setNeutralMode(NeutralMode.Brake);
+        armMotors[0].configPeakOutputForward(IntakeConstants.armInitOutput);
+        armMotors[0].configPeakOutputReverse(-IntakeConstants.armInitOutput);
+
         armMotors[1].setNeutralMode(NeutralMode.Brake);
 
         armMotors[1].setInverted(TalonFXInvertType.Clockwise);
@@ -51,8 +54,8 @@ public class IntakeSubsystem extends SubsystemBase {
             /* Config the peak and nominal outputs */
             armMotors[i].configNominalOutputForward(0, IntakeConstants.kTimeoutMs);
             armMotors[i].configNominalOutputReverse(0, IntakeConstants.kTimeoutMs);
-            armMotors[i].configPeakOutputForward(PIDConstants.kIntakeGains.kPeakOutput, IntakeConstants.kTimeoutMs);
-            armMotors[i].configPeakOutputReverse(-PIDConstants.kIntakeGains.kPeakOutput, IntakeConstants.kTimeoutMs);
+            armMotors[1].configPeakOutputForward(PIDConstants.kIntakeGains.kPeakOutput, IntakeConstants.kTimeoutMs);
+            armMotors[1].configPeakOutputReverse(-PIDConstants.kIntakeGains.kPeakOutput, IntakeConstants.kTimeoutMs);
 
             /* Config the Velocity closed loop gains in slot0 */
             armMotors[i].config_kF(IntakeConstants.kPIDLoopIdx, PIDConstants.kIntakeGains.kF, IntakeConstants.kTimeoutMs);
@@ -73,7 +76,7 @@ public class IntakeSubsystem extends SubsystemBase {
         resetEncoders();
     }
 
-    public void runArm(double fwd, boolean isMoving, double lastPos) {
+    public void runArm(double fwd, boolean isMoving, double lastPos, double lockedPosition) {
         // double targetVelocity_UnitsPer100ms = Constants.IntakeConstants.armPower * fwd * 2000.0 * 2048.0 / 600.0;
         double setPoint = lastPos + fwd*2048*IntakeConstants.armPosRangeModifier;
         // setPoint = Math.max(setPoint, 0);
@@ -82,8 +85,17 @@ public class IntakeSubsystem extends SubsystemBase {
             // armMotors[1].set(fwd * Constants.IntakeConstants.armPower);
             armMotors[1].set(TalonFXControlMode.Position, setPoint);
         } else {
-            armMotors[1].set(TalonFXControlMode.Position, lastPos);
+            armMotors[1].set(TalonFXControlMode.Position, lockedPosition);
         }
+    }
+
+    public void runArmNormal (double fwd, boolean isMoving) {
+        if (isMoving) {
+            armMotors[1].set(fwd);
+        } else {
+            armMotors[1].set(0);
+        }
+
     }
 
     public double getPosition() {
@@ -105,7 +117,7 @@ public class IntakeSubsystem extends SubsystemBase {
     
 
     public void runRoller(double fwd) {
-        armMotors[0].set(fwd*IntakeConstants.rollerPower);
+        armMotors[0].set(fwd);
     }
 
     public void stopRoller() {

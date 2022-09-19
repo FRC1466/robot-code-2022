@@ -49,7 +49,7 @@ public final class Constants {
     public static final double kPDriveVel = 5;
 
     // Drive limiters
-    public static final double kDrivePercentDefault = 0.6;
+    public static final double kDrivePercentDefault = 0.75;
     public static final double kDrivePercentActive = 0.20;
     public static final double kDrivePercentActivePID = 0.8;
     public static final double kDrivePercentDefaultPID = 1.2;
@@ -72,12 +72,14 @@ public final class Constants {
     public static final double kPeakOutput = 0.2;
 
     public static final double kTestForward = -20000;
-    public static final double kTestRotate = 0.0;
+    public static final double kTestRotate = 500.0;
     public static final double kTestForwardErrorLimit = 800.0;
 
     public static final double kArmUp = -0.8;
     public static final double kRollTime = 1.5;
     public static final double kArmErrorFinish = 400.0;
+
+    public static final double kPartyRot = 0.9;
   }
 
   public static final class IntakeConstants {
@@ -86,19 +88,16 @@ public final class Constants {
 
     public static final int armEncoderPort = 5;
 
-    public static final double armPower = 0.30;
-    public static final double rollerPower = 0.50;
+    public static final double armPower = 0.40;
+    public static final double armInitOutput = 0.8;
+    public static final double rollerPower = 3.0;
 
     public static final int kSlotIdx = 0;
     public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
 
-    public static final double armStartPos = -15500.0 ;
-    public static final double armPosRangeModifier = 9.6;
-
-    private static final double Ku = 4;
-    private static final double Tu = 0.7;
-    
+    public static final double armStartPos = 0.0 ; //-15500.0
+    public static final double armPosRangeModifier = 13.0*2;
 
   }
 

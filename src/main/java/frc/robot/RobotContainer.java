@@ -6,18 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -25,7 +14,9 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.Autonomous.AutoArmCommand;
 import frc.robot.commands.Autonomous.AutoCommand;
+import frc.robot.commands.Autonomous.AutoRoller;
 import frc.robot.commands.Autonomous.ComplexAuto;
+import frc.robot.commands.Autonomous.PartyMode;
 import frc.robot.commands.ArmCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -33,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -57,6 +49,8 @@ public class RobotContainer {
   DriveCommand m_DriveCommand = new DriveCommand(m_robotDrive, m_driverController, false);
   DriveCommand m_DriveCommandPID = new DriveCommand(m_robotDrive, m_driverController, true);
   ArmCommand m_ArmCommand = new ArmCommand(m_robotIntake, m_intakeController);
+  PartyMode m_PartyMode = new PartyMode(m_robotDrive);
+  
 
 
 
@@ -105,7 +99,10 @@ public class RobotContainer {
         .whenPressed(m_DriveCommandPID)
         .whenReleased(m_DriveCommand);
         // A button is for PID
-    }
+    new JoystickButton(m_driverController, Button.kY.value)
+        .whenPressed(m_PartyMode)
+        .whenReleased(m_DriveCommand);
+    } 
     
 
 
